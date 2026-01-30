@@ -1,0 +1,2067 @@
+#:kivy 2.0
+
+# ============================================================
+# COLOR PALETTE & DESIGN TOKENS
+# ============================================================
+
+# Primary Colors
+#:set color_primary (0.40, 0.70, 1.0, 1)
+#:set color_primary_light (0.40, 0.70, 1.0, 0.15)
+#:set color_primary_very_light (0.40, 0.70, 1.0, 0.05)
+
+# Background Colors
+#:set color_dark_bg (0.08, 0.10, 0.14, 1)
+#:set color_card_bg (0.12, 0.14, 0.18, 1)
+#:set color_surface (0.15, 0.17, 0.21, 1)
+#:set color_surface_hover (0.18, 0.20, 0.24, 1)
+#:set color_surface_alt (0.10, 0.12, 0.16, 1)
+
+# Text Colors
+#:set color_text_primary (0.95, 0.96, 0.98, 1)
+#:set color_text_secondary (0.65, 0.68, 0.74, 1)
+#:set color_text_tertiary (0.45, 0.48, 0.54, 1)
+#:set color_text_disabled (0.35, 0.38, 0.44, 1)
+
+# Border Colors
+#:set color_border_light (0.25, 0.28, 0.34, 1)
+#:set color_boarder_light (0.25, 0.28, 0.34, 1)
+
+# Status Colors
+#:set color_error (0.95, 0.35, 0.45, 1)
+#:set color_success (0.25, 0.90, 0.50, 1)
+
+# ============================================================
+# SPACING & SIZING TOKENS
+# ============================================================
+
+#:set spacing_xs dp(4)
+#:set spacing_sm dp(8)
+#:set spacing_md dp(12)
+#:set spacing_lg dp(16)
+#:set spacing_xl dp(20)
+#:set spacing_2xl dp(24)
+#:set spacing_3xl dp(32)
+
+#:set radius_sm dp(4)
+#:set radius_md dp(8)
+#:set radius_lg dp(12)
+#:set radius_xl dp(16)
+#:set radius_2xl dp(20)
+#:set radius_3xl dp(24)
+
+#:set font_sm sp(12)
+#:set font_md sp(14)
+#:set font_lg sp(16)
+#:set font_xl sp(18)
+#:set font_2xl sp(20)
+#:set font_3xl sp(24)
+#:set font_4xl sp(32)
+
+#:set height_button dp(48)
+#:set height_button_sm dp(40)
+#:set height_button_lg dp(56)
+#:set height_nav_item dp(48)
+
+#:set width_sidebar dp(240)
+#:set width_sidebar_collapsed dp(64)
+
+# ============================================================
+# WIDGET TEMPLATES
+# ============================================================
+
+<GlassButton@Button>:
+    background_normal: ""
+    background_down: ""
+    background_color: 0, 0, 0, 0
+    color: color_text_primary
+    font_size: font_xl
+    size_hint_y: None
+    padding: spacing_lg, spacing_lg
+    text_size: self.width - spacing_lg, None
+    halign: "center"
+    valign: "middle"
+    shorten: False
+    height: self.texture_size[1] + spacing_2xl
+    opacity: 1
+    canvas.before:
+        # Background blur effect (glass)
+        Color:
+            rgba: color_card_bg
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [radius_2xl]
+       # Border glow effect
+        Color:
+            rgba: color_primary_light
+        RoundedRectangle:
+            pos: (self.x + spacing_xs, self.y + spacing_xs)
+            size: (self.width - spacing_sm, self.height - spacing_sm)
+            radius: [radius_xl]
+
+<SmallButton@Button>:
+    background_normal: ""
+    background_down: ""
+    color: color_text_primary
+    font_size: font_lg
+    size_hint_y: None
+    height: height_button_sm
+    opacity: 1
+    canvas.before:
+        Color:
+            rgba: color_card_bg
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [radius_lg]
+        Color:
+            rgba: color_primary_light
+        RoundedRectangle:
+            pos: (self.x + spacing_xs, self.y + spacing_xs)
+            size: (self.width - spacing_sm, self.height - spacing_sm)
+            radius: [radius_md]
+
+<AnimatedButton@Button>:
+    background_normal: ""
+    background_down: ""
+    color: color_text_primary
+    font_size: font_lg
+    size_hint_y: None
+    height: height_button
+    opacity: 1
+    scale_x: 1
+    scale_y: 1
+    canvas.before:
+        PushMatrix
+        Translate:
+            xy: self.center_x, self.center_y
+        Scale:
+            xyz: self.scale_x, self.scale_y, 1
+        Translate:
+            xy: -self.center_x, -self.center_y
+        Color:
+            rgba: color_card_bg
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [radius_lg]
+        Color:
+            rgba: color_primary_light
+        RoundedRectangle:
+            pos: (self.x + spacing_xs, self.y + spacing_xs)
+            size: (self.width - spacing_sm, self.height - spacing_sm)
+            radius: [radius_md]
+        PopMatrix
+
+<PrimaryButton@Button>:
+    background_normal: ""
+    background_down: ""
+    color: color_text_primary
+    font_size: font_2xl
+    font_bold: True
+    size_hint_y: None
+    height: height_button_lg
+    opacity: 1
+    canvas.before:
+        Color:
+            rgba: color_primary
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [radius_lg]
+    canvas.after:
+        # Subtle shine/highlight effect
+        Color:
+            rgba: (1, 1, 1, 0.1)
+        RoundedRectangle:
+            pos: (self.x, self.y + self.height * 0.5)
+            size: (self.width, self.height * 0.25)
+            radius: [radius_lg]
+
+# (only the NavButton template portion is changed below)
+#:kivy 2.0
+
+# ... (the rest of your KV remains unchanged) ...
+
+<NavButton@ButtonBehavior+BoxLayout>:
+    icon: ""
+    full_text: ""
+    orientation: "horizontal"
+    size_hint_y: None
+    height: height_nav_item
+    padding: spacing_md, spacing_sm
+    spacing: spacing_md
+    icon_shown: (self.parent and self.parent.parent and self.parent.parent.parent and self.parent.parent.parent.width <= width_sidebar_collapsed)
+    active: getattr(self, 'active', False)
+    opacity: 1
+    canvas.before:
+        # Animated background transition
+        Color:
+            rgba: color_surface_hover if self.active else color_surface
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [radius_lg]
+        # Active indicator bar on left
+        Color:
+            rgba: color_primary if self.active else (0, 0, 0, 0)
+        RoundedRectangle:
+            pos: (self.x + spacing_xs, self.y + spacing_xs)
+            size: (spacing_sm if self.active else 0, self.height - spacing_sm)
+            radius: [radius_sm]
+    BoxLayout:
+        id: icon_box
+        size_hint_x: None
+        width: dp(32)
+        orientation: "horizontal"
+        Image:
+            id: nb_icon
+            source: root.icon
+            size_hint: None, None
+            size: (dp(32), dp(32))
+            allow_stretch: True
+            keep_ratio: True
+    Label:
+        id: nb_label
+        text: root.full_text if not root.icon_shown else ""
+        size_hint_x: 1 if not root.icon_shown else None
+        width: self.texture_size[0] if not root.icon_shown else dp(0)
+        halign: "left"
+        valign: "middle"
+        text_size: (self.width - spacing_lg, None)
+        color: color_text_primary if root.active else color_text_secondary
+        bold: root.active
+
+# ... (rest of KV unchanged) ...
+
+<UserArea@FloatLayout>:
+    size_hint_y: None
+    height: dp(160)
+    canvas.before:
+        Color:
+            rgba: color_dark_bg
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [radius_lg]
+    Button:
+        id: change_pass_btn
+        text: "Change pass" if (self.parent and self.parent.parent and self.parent.parent.width > width_sidebar_collapsed) else ""
+        size_hint_x: None
+        size_hint_y: None
+        width: self.parent.width - spacing_2xl if self.parent else width_sidebar
+        height: height_button_sm
+        x: spacing_lg
+        y: spacing_2xl
+        opacity: 1
+        disabled: False
+        background_normal: ""
+        background_color: 0, 0, 0, 0
+        color: color_text_primary
+        font_size: font_lg if (self.parent and self.parent.parent and self.parent.parent.width > width_sidebar_collapsed) else sp(18)
+        canvas.before:
+            Color:
+                rgba: color_card_bg
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [radius_md]
+            Color:
+                rgba: color_primary_light
+            RoundedRectangle:
+                pos: (self.x + spacing_xs, self.y + spacing_xs)
+                size: (self.width - spacing_sm, self.height - spacing_sm)
+                radius: [dp(6)]
+        on_release: app.open_change_pass_popup()
+    Button:
+        id: logout_btn
+        text: "Logout" if (self.parent and self.parent.parent and self.parent.parent.width > width_sidebar_collapsed) else ""
+        size_hint_x: None
+        size_hint_y: None
+        width: self.parent.width - spacing_2xl if self.parent else width_sidebar
+        height: height_button_sm
+        x: spacing_lg
+        y: spacing_md
+        opacity: 1
+        disabled: False
+        background_normal: ""
+        background_color: 0, 0, 0, 0
+        color: color_error
+        font_size: font_lg if (self.parent and self.parent.parent and self.parent.parent.width > width_sidebar_collapsed) else sp(20)
+        canvas.before:
+            Color:
+                rgba: color_card_bg
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [radius_md]
+            Color:
+                rgba: (color_error[0], color_error[1], color_error[2], 0.15)
+            RoundedRectangle:
+                pos: (self.x + spacing_xs, self.y + spacing_xs)
+                size: (self.width - spacing_sm, self.height - spacing_sm)
+                radius: [dp(6)]
+        on_release: app.confirm_logout()
+    Button:
+        id: user_btn
+        text: (app.logged_user) if (self.parent and self.parent.parent and self.parent.parent.width > width_sidebar_collapsed) else ""
+        size_hint_x: None
+        size_hint_y: None
+        width: self.parent.width - spacing_2xl if self.parent else width_sidebar
+        height: height_button
+        x: spacing_lg
+        y: spacing_sm
+        opacity: 1
+        disabled: False
+        background_normal: ""
+        background_color: 0, 0, 0, 0
+        color: color_text_primary
+        font_size: font_xl
+        canvas.before:
+            Color:
+                rgba: color_surface_alt
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [radius_lg]
+            Color:
+                rgba: color_primary_very_light
+            RoundedRectangle:
+                pos: (self.x + spacing_xs, self.y + spacing_xs)
+                size: (self.width - spacing_sm, self.height - spacing_sm)
+                radius: [dp(10)]
+        on_release: app.toggle_user_menu(self)
+
+<Sidebar@BoxLayout>:
+    orientation: "vertical"
+    size_hint_x: None
+    width: width_sidebar
+    padding: spacing_md
+    spacing: spacing_md
+    # Show/hide nav items based on width
+    collapsed: self.width <= width_sidebar_collapsed + dp(10)
+    canvas.before:
+        Color:
+            rgba: color_dark_bg
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [radius_3xl]
+        # Border accent - hide when collapsed
+        Color:
+            rgba: color_border_light if not self.collapsed else (0, 0, 0, 0)
+        RoundedRectangle:
+            pos: (self.x + spacing_md, self.y + self.height - spacing_sm)
+            size: (self.width - spacing_2xl, spacing_xs)
+            radius: [dp(2)]
+    BoxLayout:
+        size_hint_y: None
+        height: height_button
+        spacing: spacing_md
+        padding: spacing_sm, 0
+        Label:
+            text: "Menu"
+            color: color_text_secondary
+            font_size: font_lg
+            size_hint_x: 1
+            halign: "left"
+            # Hide label when sidebar is collapsed
+            opacity: 0 if root.collapsed else 1
+            disabled: root.collapsed
+            size_hint_y: None
+            height: height_button
+        Button:
+            id: toggle_btn
+            size_hint: None, None
+            width: dp(32)
+            height: dp(32)
+            background_normal: ""
+            background_down: ""
+            background_color: 0, 0, 0, 0
+            on_release: app.toggle_sidebar()
+            canvas.before:
+                Color:
+                    rgba: color_border_light
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [radius_md]
+                Color:
+                    rgba: color_text_secondary
+                RoundedRectangle:
+                    pos: (self.x + dp(8), self.y + dp(8))
+                    size: (dp(16), dp(2))
+                    radius: [dp(1)]
+                Color:
+                    rgba: color_text_secondary
+                RoundedRectangle:
+                    pos: (self.x + dp(8), self.y + dp(14))
+                    size: (dp(16), dp(2))
+                    radius: [dp(1)]
+                Color:
+                    rgba: color_text_secondary
+                RoundedRectangle:
+                    pos: (self.x + dp(8), self.y + dp(20))
+                    size: (dp(16), dp(2))
+                    radius: [dp(1)]
+    Widget:
+        size_hint_y: None
+        height: spacing_xs
+        # Hide spacer when collapsed
+        opacity: 0 if root.collapsed else 1
+        disabled: root.collapsed
+    ScrollView:
+        size_hint_y: 1
+        do_scroll_x: False
+        bar_width: dp(3)
+        bar_color: color_border_light
+        # Hide entire nav section when sidebar is collapsed
+        opacity: 0 if root.collapsed else 1
+        disabled: root.collapsed
+        canvas.before:
+            Color:
+                rgba: 0, 0, 0, 0
+        GridLayout:
+            cols: 1
+            size_hint_y: None
+            height: self.minimum_height
+            spacing: spacing_sm
+            padding: spacing_xs
+            NavButton:
+                icon: "icons/home.png"
+                full_text: "Home"
+                on_release: app.navigate_to("home")
+            NavButton:
+                icon: "icons/add_expense.png"
+                full_text: "Add Expense"
+                on_release: app.navigate_to("add_expense")
+            NavButton:
+                icon: "icons/activity_log.png"
+                full_text: "Activity Log"
+                on_release: app.navigate_to("activity_log")
+            NavButton:
+                icon: "icons/chart.png"
+                full_text: "Charts"
+                on_release: app.navigate_to("charts")
+            Widget:
+                size_hint_y: None
+                height: dp(8)
+    Widget:
+        size_hint_y: None
+        height: spacing_xs
+        # Hide spacer when collapsed
+        opacity: 0 if root.collapsed else 1
+        disabled: root.collapsed
+    UserArea:
+        id: user_area
+        # Hide user area when sidebar is collapsed
+        opacity: 0 if root.collapsed else 1
+        disabled: root.collapsed
+
+<MainAppScreen>:
+    FloatLayout:
+        # Main content - fixed position, not affected by sidebar
+        ScreenManager:
+            id: inner_content_manager
+            size_hint: 1, 1
+            pos_hint: {'x': 0, 'y': 0}
+            HomeScreen:
+                name: "home"
+            AddExpenseScreen:
+                name: "add_expense"
+            ActivityLogScreen:
+                name: "activity_log"
+            ChartsScreen:
+                name: "charts"
+        
+        # Overlay sidebar - floats on top of content
+        Sidebar:
+            id: main_sidebar
+            pos_hint: {'x': 0, 'top': 1}
+            size_hint_x: None
+            size_hint_y: 1
+
+<LoginScreen>:
+    FloatLayout:
+        canvas.before:
+            Color:
+                rgba: color_dark_bg
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'center'
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_x: None
+                width: min(root.width - dp(40), dp(480))
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: spacing_2xl
+                padding: spacing_3xl
+                canvas.before:
+                    Color:
+                        rgba: color_card_bg
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [radius_3xl]
+                    Color:
+                        rgba: color_border_light
+                    Line:
+                        width: 1
+                        rounded_rectangle: (*self.pos, *self.size, radius_3xl)
+                
+                Label:
+                    text: "FJ Expenses Tracker"
+                    font_size: font_4xl
+                    size_hint_y: None
+                    height: self.texture_size[1] + spacing_lg
+                    color: color_text_primary
+                    halign: "center"
+                    bold: True
+                
+                Label:
+                    text: "Welcome back"
+                    font_size: font_lg
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    color: color_text_tertiary
+                    halign: "center"
+                
+                # Username Input
+                BoxLayout:
+                    size_hint_y: None
+                    height: height_button
+                    canvas.before:
+                        Color:
+                            rgba: color_surface
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [radius_lg]
+                        Color:
+                            rgba: color_border_light
+                        Line:
+                            width: 1
+                            rounded_rectangle: (*self.pos, *self.size, radius_lg)
+                    TextInput:
+                        id: username
+                        hint_text: "Username"
+                        hint_text_color: color_text_disabled
+                        multiline: False
+                        foreground_color: color_text_primary
+                        background_color: 0, 0, 0, 0
+                        font_size: font_xl
+                        padding: spacing_lg, (self.height - font_xl)/2
+                
+                # Password Input
+                BoxLayout:
+                    size_hint_y: None
+                    height: height_button
+                    spacing: spacing_md
+                    canvas.before:
+                        Color:
+                            rgba: color_surface
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [radius_lg]
+                        Color:
+                            rgba: color_border_light
+                        Line:
+                            width: 1
+                            rounded_rectangle: (*self.pos, *self.size, radius_lg)
+                    TextInput:
+                        id: password
+                        hint_text: "Password"
+                        hint_text_color: color_text_disabled
+                        multiline: False
+                        password: not show_pwd.active
+                        foreground_color: color_text_primary
+                        background_color: 0, 0, 0, 0
+                        font_size: font_xl
+                        padding: spacing_lg, (self.height - font_xl)/2
+                    CheckBox:
+                        id: show_pwd
+                        size_hint_x: None
+                        width: height_button
+                    Label:
+                        text: "Show"
+                        size_hint_x: None
+                        width: dp(50)
+                        color: color_text_secondary
+                        font_size: font_sm
+                
+                # Remember Me Checkbox
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(40)
+                    spacing: spacing_md
+                    padding: spacing_sm, 0
+                    
+                    CheckBox:
+                        id: remember_me
+                        active: True
+                        size_hint_x: None
+                        width: dp(32)
+                        canvas.before:
+                            Color:
+                                rgba: color_surface
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [dp(4)]
+                    
+                    Label:
+                        text: "🔒 Remember me (stay logged in)"
+                        color: color_text_secondary
+                        font_size: font_md
+                        halign: "left"
+                        valign: "middle"
+                        text_size: self.width, None
+                
+                # Login Button
+                Button:
+                    text: "LOGIN"
+                    size_hint_y: None
+                    height: height_button_lg
+                    background_normal: ""
+                    background_down: ""
+                    background_color: 0, 0, 0, 0
+                    color: color_text_primary
+                    font_size: font_2xl
+                    bold: True
+                    on_release: root.do_login(username.text, password.text, remember_me.active)
+                    canvas.before:
+                        Color:
+                            rgba: color_primary
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [radius_lg]
+                        # Shine effect
+                        Color:
+                            rgba: (1, 1, 1, 0.1)
+                        RoundedRectangle:
+                            pos: (self.x, self.y + self.height * 0.5)
+                            size: (self.width, self.height * 0.25)
+                            radius: [radius_lg]
+                
+                # Sign up section
+                BoxLayout:
+                    size_hint_y: None
+                    height: height_button
+                    spacing: spacing_md
+                    
+                    Label:
+                        text: "New here?"
+                        size_hint_x: None
+                        width: self.texture_size[0]
+                        color: color_text_secondary
+                        font_size: font_lg
+                    
+                    Button:
+                        text: "Create account"
+                        size_hint: None, 1
+                        width: self.texture_size[0] + spacing_md
+                        background_normal: ""
+                        background_down: ""
+                        background_color: 0, 0, 0, 0
+                        color: color_primary
+                        font_size: font_lg
+                        bold: True
+                        on_release: app.root.current = "register"
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 0.1)
+                            Line:
+                                width: 1
+                                points: (self.x, self.y + dp(30), self.x + self.width, self.y + dp(30))
+                                
+                                
+                                
+                                
+<RegisterScreen>:
+    FloatLayout:
+        canvas.before:
+            Color:
+                rgba: color_dark_bg
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'center'
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_x: None
+                width: min(root.width - dp(40), dp(480))
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: spacing_xl
+                padding: spacing_3xl
+                canvas.before:
+                    Color:
+                        rgba: color_card_bg
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [radius_3xl]
+                    Color:
+                        rgba: color_border_light
+                    Line:
+                        width: 1
+                        rounded_rectangle: (*self.pos, *self.size, radius_3xl)
+                Label:
+                    text: "Create Account"
+                    font_size: font_4xl
+                    size_hint_y: None
+                    height: self.texture_size[1] + spacing_lg
+                    color: color_text_primary
+                    halign: "center"
+                    bold: True
+                Label:
+                    text: "Admin Registration"
+                    font_size: font_lg
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    color: color_text_tertiary
+                    halign: "center"
+                BoxLayout:
+                    size_hint_y: None
+                    height: height_button
+                    canvas.before:
+                        Color:
+                            rgba: color_surface
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [radius_lg]
+                        Color:
+                            rgba: color_border_light
+                        Line:
+                            width: 1
+                            rounded_rectangle: (*self.pos, *self.size, radius_lg)
+                    TextInput:
+                        id: reg_username
+                        hint_text: "Username"
+                        hint_text_color: color_text_disabled
+                        multiline: False
+                        foreground_color: color_text_primary
+                        background_color: 0, 0, 0, 0
+                        font_size: font_xl
+                        padding: spacing_lg, (self.height - font_xl)/2
+                BoxLayout:
+                    size_hint_y: None
+                    height: height_button
+                    spacing: spacing_md
+                    canvas.before:
+                        Color:
+                            rgba: color_surface
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [radius_lg]
+                        Color:
+                            rgba: color_border_light
+                        Line:
+                            width: 1
+                            rounded_rectangle: (*self.pos, *self.size, radius_lg)
+                    TextInput:
+                        id: reg_password
+                        hint_text: "Password"
+                        hint_text_color: color_text_disabled
+                        multiline: False
+                        password: not show_pwd_reg.active
+                        foreground_color: color_text_primary
+                        background_color: 0, 0, 0, 0
+                        font_size: font_xl
+                        padding: spacing_lg, (self.height - font_xl)/2
+                    CheckBox:
+                        id: show_pwd_reg
+                        size_hint_x: None
+                        width: height_button
+                    Label:
+                        text: "Show"
+                        size_hint_x: None
+                        width: dp(50)
+                        color: color_text_secondary
+                        font_size: font_sm
+                BoxLayout:
+                    size_hint_y: None
+                    height: height_button
+                    canvas.before:
+                        Color:
+                            rgba: color_surface
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [radius_lg]
+                        Color:
+                            rgba: color_border_light
+                        Line:
+                            width: 1
+                            rounded_rectangle: (*self.pos, *self.size, radius_lg)
+                    TextInput:
+                        id: reg_email
+                        hint_text: "Email (optional)"
+                        hint_text_color: color_text_disabled
+                        multiline: False
+                        foreground_color: color_text_primary
+                        background_color: 0, 0, 0, 0
+                        font_size: font_xl
+                        padding: spacing_lg, (self.height - font_xl)/2
+                
+                BoxLayout:
+                    size_hint_y: None
+                    height: height_button_lg
+                    spacing: spacing_lg
+                    
+                    # CREATE ACCOUNT Button - UPDATED WITH COLOR AND ROUNDED CORNERS
+                    Button:
+                        id: register_btn
+                        text: "CREATE ACCOUNT"
+                        background_normal: ""
+                        background_down: ""
+                        background_color: 0, 0, 0, 0
+                        color: color_text_primary
+                        font_size: font_2xl
+                        bold: True
+                        on_release: root.do_register(reg_username.text, reg_password.text, reg_email.text)
+                        canvas.before:
+                            Color:
+                                rgba: (0.15, 0.65, 0.95, 1) if not self.disabled else (0.3, 0.3, 0.3, 1)
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [radius_2xl]
+                            # Shine effect
+                            Color:
+                                rgba: (1, 1, 1, 0.1)
+                            RoundedRectangle:
+                                pos: (self.x, self.y + self.height * 0.5)
+                                size: (self.width, self.height * 0.25)
+                                radius: [radius_2xl]
+                    
+                    # Back Button
+                    Button:
+                        text: "Back"
+                        background_normal: ""
+                        background_down: ""
+                        background_color: 0, 0, 0, 0
+                        color: color_text_secondary
+                        font_size: font_xl
+                        on_release: app.root.current = "login"
+                        canvas.before:
+                            Color:
+                                rgba: color_border_light
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [radius_lg]
+                            Color:
+                                rgba: color_border_light
+                            Line:
+                                width: 1
+                                rounded_rectangle: (*self.pos, *self.size, radius_lg)
+                                
+                                
+                                
+<HomeScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        canvas.before:
+            Color:
+                rgba: color_dark_bg
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        
+        ScrollView:
+            do_scroll_x: False
+            bar_width: dp(3)
+            bar_color: color_border_light
+            
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
+                padding: spacing_lg, spacing_2xl
+                spacing: spacing_2xl
+                
+                Label:
+                    text: "Dashboard"
+                    font_size: font_4xl
+                    color: color_text_primary
+                    size_hint_y: None
+                    height: dp(50)
+                    halign: "center"
+                    text_size: self.width, None
+                    bold: True
+                
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: spacing_md
+                    
+                    Label:
+                        text: "Income Sources"
+                        font_size: font_2xl
+                        color: color_text_secondary
+                        size_hint_y: None
+                        height: dp(30)
+                        halign: "left"
+                        text_size: self.width, None
+                        bold: True
+                    
+                    GridLayout:
+                        id: income_container
+                        cols: 1
+                        size_hint_y: None
+                        height: self.minimum_height
+                        spacing: spacing_sm
+                              
+                Label:
+                    text: "Statistics"
+                    font_size: font_2xl
+                    color: color_text_secondary
+                    size_hint_y: None
+                    height: dp(30)
+                    halign: "left"
+                    text_size: self.width, None
+                    bold: True
+                
+                GridLayout:
+                    cols: 1 if root.width < 600 else 2
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: spacing_lg
+                    row_default_height: dp(140)
+                    row_force_default: True
+                    
+                    BoxLayout:
+                        orientation: "vertical"
+                        padding: spacing_lg
+                        canvas.before:
+                            Color:
+                                rgba: color_card_bg
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [radius_lg]
+                            Color:
+                                rgba: color_primary_light
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [radius_lg]
+                        BoxLayout:
+                            orientation: "horizontal"
+                            spacing: spacing_md
+                            Label:
+                                text: ""
+                                font_size: sp(32)
+                                size_hint_x: None
+                                width: dp(40)
+                                halign: "center"
+                            BoxLayout:
+                                orientation: "vertical"
+                                spacing: spacing_xs
+                                Label:
+                                    text: "Total Expenses"
+                                    font_size: font_sm
+                                    color: color_text_tertiary
+                                    size_hint_y: None
+                                    height: self.texture_size[1]
+                                    halign: "left"
+                                    text_size: self.width, None
+                                Label:
+                                    id: total_label
+                                    text: "₱0.00"
+                                    font_size: font_3xl
+                                    color: color_primary
+                                    bold: True
+                                    size_hint_y: None
+                                    height: self.texture_size[1]
+                                    halign: "left"
+                                    text_size: self.width, None
+                    
+                    BoxLayout:
+                        orientation: "vertical"
+                        padding: spacing_lg
+                        canvas.before:
+                            Color:
+                                rgba: color_card_bg
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [radius_lg]
+                            Color:
+                                rgba: (1.0, 0.40, 0.70, 0.1)
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [radius_lg]
+                        BoxLayout:
+                            orientation: "horizontal"
+                            spacing: spacing_md
+                            Label:
+                                text: ""
+                                font_size: sp(32)
+                                size_hint_x: None
+                                width: dp(40)
+                                halign: "center"
+                            BoxLayout:
+                                orientation: "vertical"
+                                spacing: spacing_xs
+                                Label:
+                                    text: "Today"
+                                    font_size: font_sm
+                                    color: color_text_tertiary
+                                    size_hint_y: None
+                                    height: self.texture_size[1]
+                                    halign: "left"
+                                    text_size: self.width, None
+                                Label:
+                                    id: today_label
+                                    text: "₱0.00"
+                                    font_size: font_3xl
+                                    color: (1.0, 0.40, 0.70, 1)
+                                    bold: True
+                                    size_hint_y: None
+                                    height: self.texture_size[1]
+                                    halign: "left"
+                                    text_size: self.width, None
+                    
+                    BoxLayout:
+                        orientation: "vertical"
+                        padding: spacing_lg
+                        canvas.before:
+                            Color:
+                                rgba: color_card_bg
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [radius_lg]
+                            Color:
+                                rgba: (0.25, 0.90, 0.50, 0.1)
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [radius_lg]
+                        BoxLayout:
+                            orientation: "horizontal"
+                            spacing: spacing_md
+                            Label:
+                                text: ""
+                                font_size: sp(32)
+                                size_hint_x: None
+                                width: dp(40)
+                                halign: "center"
+                            BoxLayout:
+                                orientation: "vertical"
+                                spacing: spacing_xs
+                                Label:
+                                    text: "This Month"
+                                    font_size: font_sm
+                                    color: color_text_tertiary
+                                    size_hint_y: None
+                                    height: self.texture_size[1]
+                                    halign: "left"
+                                    text_size: self.width, None
+                                Label:
+                                    id: monthly_label
+                                    text: "₱0.00"
+                                    font_size: font_3xl
+                                    color: (0.25, 0.90, 0.50, 1)
+                                    bold: True
+                                    size_hint_y: None
+                                    height: self.texture_size[1]
+                                    halign: "left"
+                                    text_size: self.width, None
+                    
+                    BoxLayout:
+                        orientation: "vertical"
+                        padding: spacing_lg
+                        canvas.before:
+                            Color:
+                                rgba: color_card_bg
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [radius_lg]
+                            Color:
+                                rgba: (0.95, 0.65, 0.15, 0.1)
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [radius_lg]
+                        BoxLayout:
+                            orientation: "horizontal"
+                            spacing: spacing_md
+                            Label:
+                                text: ""
+                                font_size: sp(32)
+                                size_hint_x: None
+                                width: dp(40)
+                                halign: "center"
+                            BoxLayout:
+                                orientation: "vertical"
+                                spacing: spacing_xs
+                                Label:
+                                    text: "Avg/Day"
+                                    font_size: font_sm
+                                    color: color_text_tertiary
+                                    size_hint_y: None
+                                    height: self.texture_size[1]
+                                    halign: "left"
+                                    text_size: self.width, None
+                                Label:
+                                    id: average_label
+                                    text: "₱0.00"
+                                    font_size: font_3xl
+                                    color: (0.95, 0.65, 0.15, 1)
+                                    bold: True
+                                    size_hint_y: None
+                                    height: self.texture_size[1]
+                                    halign: "left"
+                                    text_size: self.width, None
+                
+                Widget:
+                    size_hint_y: None
+                    height: dp(20)
+
+<AddExpenseScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        canvas.before:
+            Color:
+                rgba: color_dark_bg
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'top'
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_x: 1
+                width: min(root.width - dp(40), dp(700))
+                padding: spacing_lg, spacing_2xl
+                spacing: spacing_2xl
+                
+                # Title with mode button
+                BoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: dp(50)
+                    spacing: spacing_lg
+                    
+                    # Spacer
+                    Widget:
+                        size_hint_x: 0.2
+                    
+                    Label:
+                        text: "Add Transaction"
+                        font_size: font_4xl
+                        color: color_text_primary
+                        halign: "center"
+                        valign: "middle"
+                        text_size: self.size
+                        bold: True
+                        size_hint_x: 0.6
+                    
+                    # Mode Button (replaces toggle switch)
+                    Button:
+                        id: mode_button
+                        text: "Type: Expense"
+                        size_hint_x: None
+                        width: dp(160)
+                        background_normal: ""
+                        background_color: color_surface
+                        color: color_primary
+                        font_size: font_md
+                        bold: True
+                        on_release: root.toggle_mode()
+                        canvas.before:
+                            Color:
+                                rgba: color_surface
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [radius_lg]
+                
+                ScrollView:
+                    do_scroll_x: False
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint_y: None
+                        height: self.minimum_height
+                        padding: spacing_md
+                        spacing: spacing_lg
+                        
+                        # Name Input - ALWAYS VISIBLE
+                        Label:
+                            text: "Name / Note"
+                            font_size: font_md
+                            color: color_text_secondary
+                            size_hint_y: None
+                            height: dp(24)
+                            halign: "left"
+                            text_size: self.width, None
+                            bold: True
+                        BoxLayout:
+                            size_hint_y: None
+                            height: height_button
+                            canvas.before:
+                                Color:
+                                    rgba: color_surface
+                                RoundedRectangle:
+                                    pos: self.pos
+                                    size: self.size
+                                    radius: [radius_lg]
+                                Color:
+                                    rgba: color_border_light
+                                Line:
+                                    width: 1
+                                    rounded_rectangle: (*self.pos, *self.size, radius_lg)
+                            TextInput:
+                                id: name_input
+                                hint_text: "e.g., Salary, Lunch, Gas"
+                                hint_text_color: color_text_disabled
+                                multiline: False
+                                foreground_color: color_text_primary
+                                background_color: 0, 0, 0, 0
+                                font_size: font_xl
+                                padding: spacing_lg, (self.height - font_xl)/2
+                                disabled: False
+                                readonly: False
+                        
+                      
+                        
+                        # Category Selection (Only for expenses)
+                        BoxLayout:
+                            id: category_row
+                            orientation: "vertical"
+                            size_hint_y: None
+                            height: dp(80)
+                            spacing: spacing_sm
+                            
+                            Label:
+                                text: "Category"
+                                font_size: font_md
+                                color: color_text_secondary
+                                size_hint_y: None
+                                height: dp(24)
+                                halign: "left"
+                                text_size: self.width, None
+                                bold: True
+                            BoxLayout:
+                                size_hint_y: None
+                                height: height_button
+                                spacing: spacing_sm
+                                canvas.before:
+                                    Color:
+                                        rgba: color_surface
+                                    RoundedRectangle:
+                                        pos: self.pos
+                                        size: self.size
+                                        radius: [radius_lg]
+                                    Color:
+                                        rgba: color_border_light
+                                    Line:
+                                        width: 1
+                                        rounded_rectangle: (*self.pos, *self.size, radius_lg)
+                                BoxLayout:
+                                    size_hint_x: 0.8
+                                    Spinner:
+                                        id: category_spinner
+                                        text: "Select Category"
+                                        values: []
+                                        font_size: font_xl
+                                        background_color: 0, 0, 0, 0
+                                        foreground_color: color_text_primary
+                                Button:
+                                    text: "+"
+                                    size_hint_x: 0.2
+                                    background_normal: ""
+                                    background_down: ""
+                                    background_color: color_primary
+                                    color: color_text_primary
+                                    font_size: font_2xl
+                                    bold: True
+                                    on_release: root.add_new_category()
+                                    canvas.before:
+                                        Color:
+                                            rgba: self.background_color
+                                        RoundedRectangle:
+                                            pos: self.pos
+                                            size: self.size
+                                            radius: [radius_md]
+                        
+                        # Income Source Selection (Only for expenses)
+                        BoxLayout:
+                            id: income_row
+                            orientation: "vertical"
+                            size_hint_y: None
+                            height: dp(80)
+                            spacing: spacing_sm
+                            
+                            Label:
+                                text: "Pay from Income"
+                                font_size: font_md
+                                color: color_text_secondary
+                                size_hint_y: None
+                                height: dp(24)
+                                halign: "left"
+                                text_size: self.width, None
+                                bold: True
+                            BoxLayout:
+                                size_hint_y: None
+                                height: height_button
+                                canvas.before:
+                                    Color:
+                                        rgba: color_surface
+                                    RoundedRectangle:
+                                        pos: self.pos
+                                        size: self.size
+                                        radius: [radius_lg]
+                                    Color:
+                                        rgba: color_border_light
+                                    Line:
+                                        width: 1
+                                        rounded_rectangle: (*self.pos, *self.size, radius_lg)
+                                Spinner:
+                                    id: income_spinner
+                                    text: "General (No specific income)"
+                                    values: []
+                                    font_size: font_md
+                                    background_color: 0, 0, 0, 0
+                                    foreground_color: color_text_primary
+                        
+                        # Date Input
+                        Label:
+                            text: "Date (YYYY-MM-DD)"
+                            font_size: font_md
+                            color: color_text_secondary
+                            size_hint_y: None
+                            height: dp(24)
+                            halign: "left"
+                            text_size: self.width, None
+                            bold: True
+                        BoxLayout:
+                            size_hint_y: None
+                            height: height_button
+                            canvas.before:
+                                Color:
+                                    rgba: color_surface
+                                RoundedRectangle:
+                                    pos: self.pos
+                                    size: self.size
+                                    radius: [radius_lg]
+                                Color:
+                                    rgba: color_border_light
+                                Line:
+                                    width: 1
+                                    rounded_rectangle: (*self.pos, *self.size, radius_lg)
+                            TextInput:
+                                id: date_input
+                                hint_text: "2025-01-08"
+                                hint_text_color: color_text_disabled
+                                multiline: False
+                                foreground_color: color_text_primary
+                                background_color: 0, 0, 0, 0
+                                font_size: font_xl
+                                padding: spacing_lg, (self.height - font_xl)/2
+                        
+                        # Amount Input
+                        Label:
+                            text: "Amount (₱)"
+                            font_size: font_md
+                            color: color_text_secondary
+                            size_hint_y: None
+                            height: dp(24)
+                            halign: "left"
+                            text_size: self.width, None
+                            bold: True
+                        BoxLayout:
+                            size_hint_y: None
+                            height: height_button
+                            canvas.before:
+                                Color:
+                                    rgba: color_surface
+                                RoundedRectangle:
+                                    pos: self.pos
+                                    size: self.size
+                                    radius: [radius_lg]
+                                Color:
+                                    rgba: color_border_light
+                                Line:
+                                    width: 1
+                                    rounded_rectangle: (*self.pos, *self.size, radius_lg)
+                            TextInput:
+                                id: amount_input
+                                hint_text: "0.00"
+                                hint_text_color: color_text_disabled
+                                multiline: False
+                                input_filter: "float"
+                                foreground_color: color_text_primary
+                                background_color: 0, 0, 0, 0
+                                font_size: font_xl
+                                padding: spacing_lg, (self.height - font_xl)/2
+                        
+                        # Save Button
+                        Button:
+                            text: "Save"
+                            size_hint_y: None
+                            height: height_button_lg
+                            background_normal: ""
+                            background_down: ""
+                            background_color: color_primary
+                            color: color_text_primary
+                            font_size: font_2xl
+                            bold: True
+                            on_release: root.save_entry()
+                            canvas.before:
+                                Color:
+                                    rgba: self.background_color
+                                RoundedRectangle:
+                                    pos: self.pos
+                                    size: self.size
+                                    radius: [radius_lg]
+                                Color:
+                                    rgba: (1, 1, 1, 0.1)
+                                RoundedRectangle:
+                                    pos: (self.x, self.y + self.height * 0.5)
+                                    size: (self.width, self.height * 0.25)
+                                    radius: [radius_lg]
+
+
+# Update <ActivityLogScreen> section - add filter button after search bar:
+
+<ActivityLogScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        canvas.before:
+            Color:
+                rgba: color_dark_bg
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        BoxLayout:
+            orientation: "vertical"
+            padding: spacing_lg, spacing_2xl
+            spacing: spacing_lg
+            
+            # Title
+            Label:
+                text: "Activity Log"
+                font_size: font_4xl
+                color: color_text_primary
+                size_hint_y: None
+                height: dp(50)
+                halign: "center"
+                text_size: self.width, None
+                bold: True
+            
+            # Search Bar with Filter
+            BoxLayout:
+                size_hint_y: None
+                height: height_button
+                spacing: spacing_sm
+                
+                BoxLayout:
+                    size_hint_x: 0.7
+                    canvas.before:
+                        Color:
+                            rgba: color_surface
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [radius_lg]
+                        Color:
+                            rgba: color_border_light
+                        Line:
+                            width: 1
+                            rounded_rectangle: (*self.pos, *self.size, radius_lg)
+                    TextInput:
+                        id: search_input
+                        hint_text: "Search..."
+                        hint_text_color: color_text_disabled
+                        multiline: False
+                        font_size: font_xl
+                        background_color: 0, 0, 0, 0
+                        foreground_color: color_text_primary
+                        padding: spacing_lg, (self.height - font_xl)/2
+                        on_text: root.on_search(self.text)
+                    Button:
+                        text: "X"
+                        size_hint_x: None
+                        width: dp(50)
+                        background_normal: ""
+                        background_down: ""
+                        background_color: color_error
+                        color: color_text_primary
+                        font_size: font_2xl
+                        on_release: root.clear_search()
+                        canvas.before:
+                            Color:
+                                rgba: self.background_color
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [radius_md]
+                
+                Button:
+                    id: filter_button
+                    text: "Show: All"
+                    size_hint_x: 0.3
+                    background_normal: ""
+                    background_color: color_primary
+                    color: color_text_primary
+                    font_size: font_md
+                    bold: True
+                    on_release: root.toggle_show_mode()
+                    canvas.before:
+                        Color:
+                            rgba: self.background_color
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [radius_lg]
+            
+            # Sort Controls
+            BoxLayout:
+                size_hint_y: None
+                height: height_button_sm
+                spacing: spacing_md
+                Label:
+                    text: "Sort:"
+                    size_hint_x: None
+                    width: dp(50)
+                    color: color_text_tertiary
+                    font_size: font_md
+                    halign: "left"
+                    valign: "middle"
+                    text_size: self.size
+                    bold: True
+                Spinner:
+                    id: sort_spinner
+                    text: "Date (Newest)"
+                    values: ["Date (Newest)", "Date (Oldest)", "Name (A-Z)", "Price (High-Low)", "Category (A-Z)"]
+                    font_size: font_md
+                    background_color: color_surface
+                    foreground_color: color_text_primary
+                    on_text: root.apply_sort(self.text)
+                Widget:
+            
+            # Table Header
+            BoxLayout:
+                size_hint_y: None
+                height: dp(36)
+                padding: spacing_md, spacing_sm
+                spacing: spacing_sm
+                canvas.before:
+                    Color:
+                        rgba: color_surface_hover
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [radius_sm]
+                Label:
+                    text: "Name"
+                    size_hint_x: 0.27
+                    color: color_text_tertiary
+                    font_size: font_sm
+                    bold: True
+                    halign: "left"
+                    valign: "middle"
+                    text_size: self.size
+                Label:
+                    text: "Category"
+                    size_hint_x: 0.25
+                    color: color_text_tertiary
+                    font_size: font_sm
+                    bold: True
+                    halign: "center"
+                    valign: "middle"
+                    text_size: self.size
+                Label:
+                    text: "Date"
+                    size_hint_x: 0.18
+                    color: color_text_tertiary
+                    font_size: font_sm
+                    bold: True
+                    halign: "center"
+                    valign: "middle"
+                    text_size: self.size
+                Label:
+                    text: "Amount"
+                    size_hint_x: 0.17
+                    color: color_text_tertiary
+                    font_size: font_sm
+                    bold: True
+                    halign: "right"
+                    valign: "middle"
+                    text_size: self.size
+            
+            # List
+            ScrollView:
+                do_scroll_x: False
+                bar_width: dp(3)
+                bar_color: color_border_light
+                GridLayout:
+                    id: expense_list
+                    cols: 1
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: spacing_xs
+                    padding: 0
+            
+            # Total Label
+            BoxLayout:
+                size_hint_y: None
+                height: height_button
+                canvas.before:
+                    Color:
+                        rgba: color_card_bg
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [radius_lg]
+                    Color:
+                        rgba: color_primary_light
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [radius_lg]
+                Label:
+                    id: total_label
+                    text: "Total: ₱0.00"
+                    font_size: font_2xl
+                    color: color_primary
+                    bold: True
+                    halign: "right"
+                    text_size: self.width, None
+                    padding: spacing_lg, 0                    
+                                        
+
+
+<ChartsScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        canvas.before:
+            Color:
+                rgba: color_dark_bg
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        BoxLayout:
+            orientation: "vertical"
+            padding: spacing_lg
+            spacing: spacing_lg
+            
+            # Header Section
+            BoxLayout:
+                size_hint_y: None
+                height: dp(70)
+                spacing: spacing_lg
+                orientation: "vertical"
+                
+                # Title
+                Label:
+                    text: "Analytics"
+                    font_size: sp(28) if root.width >= 600 else sp(24)
+                    bold: True
+                    color: color_text_primary
+                    size_hint_y: None
+                    height: dp(40)
+                    halign: "center"
+                    valign: "middle"
+                    text_size: self.width, None
+                
+                # Controls Row
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(40)
+                    spacing: spacing_sm
+                    
+                    # View Mode Button (replaces toggle switch)
+                    Button:
+                        id: view_mode_button
+                        text: "View: Monthly"
+                        size_hint_x: None
+                        width: dp(160)
+                        background_normal: ""
+                        background_color: color_surface
+                        color: color_primary
+                        font_size: font_md
+                        bold: True
+                        on_release: root.toggle_view_mode()
+                        canvas.before:
+                            Color:
+                                rgba: color_surface
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [radius_lg]
+                    
+                    # Selectors
+                    BoxLayout:
+                        size_hint_x: 1
+                        spacing: spacing_sm
+                        
+                        Spinner:
+                            id: month_spinner
+                            text: "January"
+                            values: []
+                            disabled: True
+                            background_color: color_primary
+                            font_size: font_sm
+                            on_text: root.generate_charts()
+                            canvas.before:
+                                Color:
+                                    rgba: color_surface if not self.disabled else (0.2, 0.2, 0.2, 1)
+                                RoundedRectangle:
+                                    pos: self.pos
+                                    size: self.size
+                                    radius: [radius_md]
+                        
+                        Spinner:
+                            id: year_spinner
+                            text: "2024"
+                            values: []
+                            background_color: color_primary
+                            font_size: font_sm
+                            on_text: root.generate_charts()
+                            canvas.before:
+                                Color:
+                                    rgba: color_surface
+                                RoundedRectangle:
+                                    pos: self.pos
+                                    size: self.size
+                                    radius: [radius_md]
+                
+                      
+                 
+            
+            # Charts Section
+            ScrollView:
+                id: charts_scroll_view
+                do_scroll_x: False
+                bar_width: dp(4)
+                bar_color: color_border_light
+                
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: spacing_lg
+                    
+                    # Bar Chart Container
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint_y: None
+                        height: dp(300)
+                        padding: spacing_md
+                        canvas.before:
+                            Color:
+                                rgba: color_card_bg
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [radius_lg]
+                            Color:
+                                rgba: color_border_light
+                            Line:
+                                width: 1
+                                rounded_rectangle: (*self.pos, *self.size, radius_lg)
+                        
+                        Label:
+                            text: "Spending Trend"
+                            font_size: font_lg
+                            bold: True
+                            color: color_text_secondary
+                            size_hint_y: None
+                            height: dp(32)
+                            halign: "left"
+                            text_size: self.width, None
+                        
+                        InteractiveBarChart:
+                            id: chart_widget
+                            size_hint_y: 1
+                    
+                    # Donut Chart Container
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint_y: None
+                        height: dp(275)
+                        padding: spacing_md
+                        spacing: spacing_md
+                        canvas.before:
+                            Color:
+                                rgba: color_card_bg
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [radius_lg]
+                            Color:
+                                rgba: color_border_light
+                            Line:
+                                width: 1
+                                rounded_rectangle: (*self.pos, *self.size, radius_lg)
+                        Label:
+                            text: "Category Breakdown"
+                            font_size: font_lg
+                            bold: True
+                            color: color_text_secondary
+                            size_hint_y: None
+                            height: dp(20)
+                            halign: "left"
+                            text_size: self.width, None
+                        FloatLayout:
+                            size_hint_y: 1
+                            size_hint_x: 1
+                            minimum_height: dp(200)
+                            height: self.height
+                            canvas.before:
+                                Color:
+                                    rgba: 0.07, 0.07, 0.07, 1
+                                Rectangle:
+                                    pos: self.pos
+                                    size: self.size
+                            Image:
+                                id: pie_image
+                                source: ""
+                                allow_stretch: True
+                                keep_ratio: True
+                                size_hint: 1, 1
+                                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                                height: self.texture_size[1] if self.texture else dp(350)
+                                opacity: 1 if self.source else 0
+                                
+                    # Expense Details Section
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint_y: None
+                        height: dp(400)
+                        padding: spacing_md
+                        spacing: spacing_md
+                        canvas.before:
+                            Color:
+                                rgba: color_card_bg
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [radius_lg]
+                            Color:
+                                rgba: color_border_light
+                            Line:
+                                width: 1
+                                rounded_rectangle: (*self.pos, *self.size, radius_lg)
+                        
+                        # Title & Sort Button (merged)
+                        BoxLayout:
+                            orientation: "horizontal"
+                            size_hint_y: None
+                            height: dp(40)
+                            spacing: spacing_md
+                            
+                            Label:
+                                text: "Expense Details"
+                                font_size: font_lg
+                                bold: True
+                                color: color_text_secondary
+                                halign: "left"
+                                text_size: self.width, None
+                            
+                            # Clickable sort button
+                            Button:
+                                id: sort_button
+                                text: "Sort by: Name ▼"
+                                size_hint_x: None
+                                width: dp(180)
+                                background_normal: ""
+                                background_color: color_surface
+                                color: color_primary
+                                font_size: font_sm
+                                bold: True
+                                on_release: root.toggle_sort_mode()
+                                canvas.before:
+                                    Color:
+                                        rgba: color_surface
+                                    RoundedRectangle:
+                                        pos: self.pos
+                                        size: self.size
+                                        radius: [radius_sm]
+                        
+                        # Table Header
+                        BoxLayout:
+                            size_hint_y: None
+                            height: dp(32)
+                            padding: spacing_sm
+                            spacing: spacing_sm
+                            canvas.before:
+                                Color:
+                                    rgba: color_surface
+                                RoundedRectangle:
+                                    pos: self.pos
+                                    size: self.size
+                                    radius: [radius_sm]
+                            
+                            Label:
+                                text: "Name"
+                                size_hint_x: 0.40
+                                color: color_text_tertiary
+                                font_size: font_sm
+                                bold: True
+                                halign: "left"
+                                valign: "middle"
+                                text_size: self.size
+                            Label:
+                                text: "Category"
+                                size_hint_x: 0.30
+                                color: color_text_tertiary
+                                font_size: font_sm
+                                bold: True
+                                halign: "left"
+                                valign: "middle"
+                                text_size: self.size
+                            Label:
+                                text: "Amount"
+                                size_hint_x: 0.30
+                                color: color_text_tertiary
+                                font_size: font_sm
+                                bold: True
+                                halign: "right"
+                                valign: "middle"
+                                text_size: self.size
+                        
+                        # Table Content
+                        ScrollView:
+                            do_scroll_x: False
+                            bar_width: dp(3)
+                            bar_color: color_border_light
+                            GridLayout:
+                                id: expense_table
+                                cols: 1
+                                size_hint_y: None
+                                height: self.minimum_height
+                                spacing: spacing_xs
+                                padding: spacing_xs                                
+                                                     
+                                                                                                                       
+                                                                                                                                            
+<LoadingScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        spacing: spacing_2xl
+        padding: spacing_2xl
+        canvas.before:
+            Color:
+                rgba: color_dark_bg
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        
+        # Spacer
+        Widget:
+            size_hint_y: 0.2
+        
+        # Loading spinner label
+        Label:
+            text: "Loading"
+            font_size: sp(48)
+            color: color_primary
+            size_hint_y: None
+            height: dp(60)
+            halign: "center"
+            valign: "middle"
+        
+        # Message
+        Label:
+            text: root.message
+            font_size: sp(18)
+            color: color_text_primary
+            size_hint_y: None
+            height: dp(40)
+            halign: "center"
+            valign: "middle"
+            text_size: self.width - spacing_2xl, None
+        
+        # Progress bar
+        ProgressBar:
+            id: loading_bar
+            max: 100
+            value: 0
+            size_hint_y: None
+            height: dp(4)
+            canvas.before:
+                Color:
+                    rgba: color_card_bg
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [radius_md]
+            canvas:
+                Color:
+                    rgba: color_primary
+                RoundedRectangle:
+                    pos: self.pos
+                    size: (self.width * self.value / self.max, self.height)
+                    radius: [radius_md]
+        
+        # Spacer
+        Widget:
+            size_hint_y: 0.3
+
+ScreenManagement:
+    id: content_manager
+    LoginScreen:
+        name: "login"
+    RegisterScreen:
+        name: "register"
+    MainAppScreen:
+        name: "main_app"
+    LoadingScreen:
+        name: "loading"
+
+#:set theme_mode app.theme_mode if hasattr(app, 'theme_mode') else 'dark'
+#:set theme_color_bg color_dark_bg if theme_mode == 'dark' else (1, 1, 1, 1)
+#:set theme_color_card color_card_bg if theme_mode == 'dark' else (0.97, 0.97, 0.99, 1)
+#:set theme_color_text color_text_primary if theme_mode == 'dark' else (0.08, 0.10, 0.14, 1)
+#:set theme_color_secondary color_text_secondary if theme_mode == 'dark' else (0.18, 0.22, 0.28, 1)
+#:set theme_color_border color_border_light if theme_mode == 'dark' else (0.85, 0.88, 0.92, 1)
+
+# Add a theme toggle button to the top right of the main screen
+<MainScreen>:
+    BoxLayout:
+        orientation: "horizontal"
+        size_hint_y: None
+        height: dp(48)
+        padding: spacing_lg, spacing_lg
+        spacing: spacing_lg
+        canvas.before:
+            Color:
+                rgba: theme_color_bg
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: "FJ Expenses Tracker"
+            color: theme_color_text
+            font_size: font_2xl
+            bold: True
+        Button:
+            id: theme_toggle_btn
+            text: "Dark" if theme_mode == 'dark' else "Light"
+            size_hint_x: None
+            width: dp(48)
+            background_normal: ""
+            background_color: (0,0,0,0)
+            color: theme_color_text
+            font_size: font_xl
+            on_release: app.toggle_theme_mode()
